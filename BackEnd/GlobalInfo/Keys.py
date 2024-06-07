@@ -1,5 +1,5 @@
 # Web
-webUrl = 'https://bitspot.com.mx'
+webUrl = 'backwatchup-production.up.railway.app'
 
 # JWT
 jwtKey = 'uJAX.Dk@DisCD82hvj3-'

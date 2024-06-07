@@ -45,20 +45,14 @@ class ServerMail(object):
         self.smtp.sendmail(msg["From"], msg["To"], msg.as_string())
 
 
-def verifyEmailTemplate(link: str, strLanguage: str):
+def verifyEmailTemplate(link: str):
     title = 'Verifica tu cuenta de bitspot'
     header = 'Verifica tu correo electrónico para poder seguir usando tu cuenta de bitspot'
     body = '''
         Accede al siguiente enlace para confirmar tu correo electrónico. En caso de que no lo hayas solicitado ignora este mensaje. <br/>(Revisa tu bandeja de SPAM y muévelo a tu bandeja de entrada para poder ver el link de verificación)
     '''
     button = 'Verificar mi cuenta'
-    if strLanguage == 'en':
-        title = 'Verify your bitspot account'
-        header = 'Verify your e-mail address to continue using your bitspot account'
-        body = '''
-            Access the following link to confirm your email address. In case you have not requested it, please ignore this message <br/>(Check your SPAM folder and move it to your inbox to see the verification link).
-        '''
-        button = 'Verify my account'
+    
     template = f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -132,20 +126,14 @@ def verifyEmailTemplate(link: str, strLanguage: str):
     return template
 
 
-def forgotPasswordEmailTemplate(link: str, strLanguage: str):
+def forgotPasswordEmailTemplate(link: str):
     title = 'Cambia tu contraseña de tu cuenta de bitspot'
     header = 'Ingresa al siguiente enlace para cambiar tu contraseña'
     body = '''
         Accede al siguiente enlace para cambiar tu contraseña. En caso de que no lo hayas solicitado ignora este mensaje. <br/>(Revisa tu bandeja de SPAM y muévelo a tu bandeja de entrada para poder ver el link de verificación)
     '''
     button = 'Recuperar contraseña'
-    if strLanguage == 'en':
-        title = 'Change your bitspot account password'
-        header = 'Enter the following link to change your password'
-        body = '''
-            Access the following link to change your password. In case you have not requested it, please ignore this message <br/>(check your SPAM folder and move it to your inbox to see the verification link).
-        '''
-        button = 'Change password'
+
     template = f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
