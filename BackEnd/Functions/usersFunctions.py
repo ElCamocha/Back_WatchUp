@@ -104,6 +104,22 @@ def sendVerificationEmail(strEmail: str):
     except Exception as exception:
         Helpers.PrintException()
         return ResponsesMessages.message500
+    
+def verifyAccount(strToken: str):
+    try:
+        decoded = jwt.decode(strToken, jwtKey, algorithms=['HS256'])
+        strEmail = decoded['strEmail']
+        updateResult = dbConnLocal.clUsers.update_one(
+            {'strEmail': strEmail},
+            {'$set': {'blnVerified': True}}
+        )
+        if updateResult.modified_count > 0:
+            return ResponsesMessages.message200
+        else:
+            return ResponsesMessages.message203
+    except Exception as exception:
+        Helpers.PrintException()
+        return ResponsesMessages.message500
 
         
         

@@ -39,3 +39,17 @@ def login():
     except Exception:
         Helpers.PrintException()
         return ResponseMessages.message500
+    
+@userBlueprint.post('/verifyAccount')
+def verifyAccount():
+    try:
+        strToken = "" if ("strToken" not in request.json) else request.json['strToken']
+
+        if strToken is None or strToken == '':
+            return ResponseMessages.message203
+
+        response = callMethod.verifyAccount(strToken)
+        return jsonify(response)
+    except Exception as exception:
+        Helpers.PrintException()
+        return ResponseMessages.message500
