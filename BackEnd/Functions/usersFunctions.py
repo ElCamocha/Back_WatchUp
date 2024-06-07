@@ -1,6 +1,7 @@
 import threading
 import time
 import jwt
+import datetime
 
 from bson.objectid import ObjectId
 from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
@@ -8,6 +9,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, decode
 import BackEnd.GlobalInfo.Helpers as Helpers
 import BackEnd.GlobalInfo.ResponseMessages as ResponsesMessages
 from BackEnd.GlobalInfo.Keys import webUrl, jwtKey
+from BackEnd.GlobalInfo.serverMail import ServerMail, verifyEmailTemplate, forgotPasswordEmailTemplate
 
 
 dbConnLocal = Helpers.dbConnection()
@@ -37,10 +39,10 @@ def signup(strName: str, strLastName: str, strEmail: str, strPassword: str):
         if insertUser.inserted_id:
             # Activar cuando se tenga la funcion de verificar email
             
-            #thread = threading.Thread(target=(
-            #    lambda: 
-            #))
-            #thread.start()
+            thread = threading.Thread(target=(
+                lambda: sendVerificationEmail(strEmail) 
+            ))
+            thread.start()
             
             user = dbConnLocal.clUser.find_one({'_id': insertUser.inserted_id}, userLoginProjection)
             if '_id' in user:
@@ -88,7 +90,22 @@ def login(strEmail: str, strPassword: str):
         }
     except Exception:
         Helpers.PrintException()
+        return ResponsesMessages.message500 
+    
+    
+def sendVerificationEmail(strEmail: str):
+    try:
+        jsnData = {'strEmail': strEmail, 'now': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}
+        strToken = jwt.encode(jsnData, jwtKey, algorithm='HS256')
+        strSubject = 'Verifica tu cuenta de bitspot'
+        strBody = verifyEmailTemplate(f'{webUrl}/verificar-cuenta?token={strToken}')
+        serverMail = ServerMail()
+        serverMail.fnSendMessage(strSubject=strSubject, strBody=strBody, strToSend=strEmail)
+    except Exception as exception:
+        Helpers.PrintException()
         return ResponsesMessages.message500
+
+        
         
     
         
