@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from flask import Flask, json
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager, get_jwt, create_access_token, get_jwt_identity, create_refresh_token    
 
 from BackEnd.Directions.usersDirections import userBlueprint
@@ -7,6 +8,7 @@ from BackEnd.Directions.usersDirections import userBlueprint
 from BackEnd.GlobalInfo.Keys import jwtKey
 
 app = Flask(__name__)
+CORS(app)
 
 app.config["JWT_SECRET_KEY"] = jwtKey
 app.config["JWT_ACCES_TOKEN_EXPIRES"] = timedelta(hours=1)

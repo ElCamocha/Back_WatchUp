@@ -1,5 +1,5 @@
 # Web
-webUrl = 'backwatchup-production.up.railway.app'
+webUrl = 'http://localhost:4200'
 
 # JWT
 jwtKey = 'uJAX.Dk@DisCD82hvj3-'

@@ -46,8 +46,8 @@ class ServerMail(object):
 
 
 def verifyEmailTemplate(link: str):
-    title = 'Verifica tu cuenta de bitspot'
-    header = 'Verifica tu correo electrónico para poder seguir usando tu cuenta de bitspot'
+    title = 'Verifica tu cuenta de Watch Up'
+    header = 'Verifica tu correo electrónico para poder seguir usando tu cuenta de Watch Up'
     body = '''
         Accede al siguiente enlace para confirmar tu correo electrónico. En caso de que no lo hayas solicitado ignora este mensaje. <br/>(Revisa tu bandeja de SPAM y muévelo a tu bandeja de entrada para poder ver el link de verificación)
     '''

@@ -1,7 +1,7 @@
 import threading
 import time
 import jwt
-import datetime
+from datetime import datetime
 
 from bson.objectid import ObjectId
 from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
@@ -35,30 +35,25 @@ def signup(strName: str, strLastName: str, strEmail: str, strPassword: str):
         }
         
         newUser = Helpers.deleteBlankAttributes(newUser)
-        insertUser = dbConnLocal.clUsers.insert_one(newUser)
-        if insertUser.inserted_id:
-            # Activar cuando se tenga la funcion de verificar email
-            
+        insertResult = dbConnLocal.clUsers.insert_one(newUser)
+        if insertResult.inserted_id:
             thread = threading.Thread(target=(
-                lambda: sendVerificationEmail(strEmail) 
+                lambda: sendVerificationEmail(strEmail)
             ))
             thread.start()
-            
-            user = dbConnLocal.clUser.find_one({'_id': insertUser.inserted_id}, userLoginProjection)
+            user = dbConnLocal.clUsers.find_one({'_id': insertResult.inserted_id}, userLoginProjection)
             if '_id' in user:
                 user['_id'] = str(user['_id'])
-                
             identity = {'_id': user['_id']}
             accessToken = create_access_token(identity=identity)
             refreshToken = create_refresh_token(identity=identity)
             return {
-                    **ResponsesMessages.message200,
-                    'result': {'user': user},
-                    'accessToken': accessToken,
-                    'refreshToken': refreshToken,
-                    'exp': decode_token(accessToken)['exp']
-                    
-                } 
+                **ResponsesMessages.message200,
+                'result': {'user': user},
+                'accessToken': accessToken,
+                'refreshToken': refreshToken,
+                'exp': decode_token(accessToken)['exp']
+            }
         else:
             return ResponsesMessages.message500
     except Exception:
@@ -97,7 +92,7 @@ def sendVerificationEmail(strEmail: str):
     try:
         jsnData = {'strEmail': strEmail, 'now': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}
         strToken = jwt.encode(jsnData, jwtKey, algorithm='HS256')
-        strSubject = 'Verifica tu cuenta de bitspot'
+        strSubject = 'Verifica tu cuenta de Watch Up'
         strBody = verifyEmailTemplate(f'{webUrl}/verificar-cuenta?token={strToken}')
         serverMail = ServerMail()
         serverMail.fnSendMessage(strSubject=strSubject, strBody=strBody, strToSend=strEmail)
